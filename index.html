@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Bill Calculator — Bill ka Total Nikalo, Free mein</title>
+<meta name="description" content="Bill ki tasveer, Excel sheet ya text se automatic total nikalne wala free online tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark">$</span>
+      <span class="brand-name">Smart Bill<br>Calculator</span>
+    </div>
+    <nav class="site-nav">
+      <a href="#tools">Tools</a>
+      <a href="#how">Kaise Kaam Karta Hai</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Dark mode on/off">🌙</button>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-text">
+        <p class="hero-kicker">Bilkul Free — Koi Sign-up Nahi</p>
+        <h1>Bill ka total,<br>ginti khud kar legi.</h1>
+        <p class="hero-sub">Bill ki tasveer khenchein, Excel sheet upload karein, ya numbers paste karein — website khud sab jama kar ke total de degi.</p>
+        <a href="#tools" class="btn-primary">Total Nikalna Shuru Karein</a>
+      </div>
+      <div class="hero-receipt" aria-hidden="true">
+        <div class="receipt-paper">
+          <div class="receipt-line title-line">BILL RECEIPT</div>
+          <div class="receipt-row"><span>Doodh</span><span>150</span></div>
+          <div class="receipt-row"><span>Chawal 5kg</span><span>850</span></div>
+          <div class="receipt-row"><span>Bijli ka bill</span><span>4200</span></div>
+          <div class="receipt-row"><span>Ghar ka kiraya</span><span>25000</span></div>
+          <div class="receipt-dash">- - - - - - - - - - - - - -</div>
+          <div class="receipt-row total-row"><span>TOTAL</span><span id="heroTotal">0</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools" class="tools-section">
+    <div class="wrap">
+      <h2 class="section-title">Teen tareeqon se total nikalein</h2>
+
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="image" role="tab" aria-selected="true">📷 Bill Image</button>
+        <button class="tab-btn" data-tab="sheet" role="tab" aria-selected="false">📊 Excel / CSV</button>
+        <button class="tab-btn" data-tab="text" role="tab" aria-selected="false">✍️ Manual Text</button>
+      </div>
+
+      <!-- TOOL 1: IMAGE -->
+      <div class="tab-panel active" id="panel-image">
+        <div class="tool-card">
+          <h3>Bill ya Receipt ki Tasveer Se Total</h3>
+          <p class="tool-desc">Bill, receipt, ya screenshot upload karein — tool tasveer mein likhe numbers dhoond kar unko jama kar dega.</p>
+
+          <label class="dropzone" for="imageInput" id="imageDropzone">
+            <span class="dz-icon">⬆</span>
+            <span class="dz-text">Tasveer yahan drop karein ya click kar ke chunein</span>
+            <span class="dz-sub">JPG, PNG — computer screenshot ya mobile photo dono chalein gi</span>
+            <input type="file" id="imageInput" accept="image/*" hidden>
+          </label>
+
+          <img id="imagePreview" class="preview-img" hidden alt="Preview">
+
+          <label class="min-filter-label">Chhote numbers (jaise phone model) hide karne ke liye minimum amount:
+            <input type="number" id="minAmountInput" class="min-filter-input" placeholder="jaise 50" min="0">
+          </label>
+
+          <button class="btn-primary" id="processImageBtn" disabled>Numbers Nikalein</button>
+
+          <div class="status-box" id="imageStatus" hidden></div>
+
+          <div class="result-box" id="imageResult" hidden>
+            <h4>Mile Hue Numbers:</h4>
+            <div class="found-numbers" id="imageFoundNumbers"></div>
+            <p class="note">Ghalat number lag raha hai to uske box ko uncheck kar dein.</p>
+            <div class="grand-total">Total: <span id="imageTotalValue">0</span></div>
+            <div class="result-actions">
+              <button class="btn-secondary" id="imagePrintBtn">Print / PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 2: SHEET -->
+      <div class="tab-panel" id="panel-sheet">
+        <div class="tool-card">
+          <h3>Excel ya CSV Sheet Se Total</h3>
+          <p class="tool-desc">Apni Excel (.xlsx) ya CSV file upload karein — number wale column ko chun kar tool automatically sum nikal dega.</p>
+
+          <label class="dropzone" for="sheetInput" id="sheetDropzone">
+            <span class="dz-icon">⬆</span>
+            <span class="dz-text">Excel/CSV file yahan drop karein ya click kar ke chunein</span>
+            <span class="dz-sub">.xlsx, .xls, .csv</span>
+            <input type="file" id="sheetInput" accept=".xlsx,.xls,.csv" hidden>
+          </label>
+
+          <div class="status-box" id="sheetStatus" hidden></div>
+
+          <div class="result-box" id="sheetResult" hidden>
+            <h4>Sheet Preview:</h4>
+            <div class="table-scroll"><table id="sheetTable"></table></div>
+            <label class="col-select-label">Kaunsa column total karna hai:
+              <select id="sheetColumnSelect"></select>
+            </label>
+            <div class="grand-total">Total: <span id="sheetTotalValue">0</span></div>
+            <div class="result-actions">
+              <button class="btn-secondary" id="sheetPrintBtn">Print / PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 3: TEXT -->
+      <div class="tab-panel" id="panel-text">
+        <div class="tool-card">
+          <h3>Numbers Type/Paste Karein</h3>
+          <p class="tool-desc">Har line mein ek amount likhein ya paste karein (jaise bill ke items). Tool total, average aur count nikal dega.</p>
+
+          <textarea id="textInput" class="text-input" rows="8" placeholder="150&#10;850&#10;4200&#10;25000"></textarea>
+
+          <button class="btn-primary" id="processTextBtn">Total Nikalein</button>
+
+          <div class="result-box" id="textResult" hidden>
+            <div class="mini-stats">
+              <div class="stat"><span class="stat-label">Total</span><span class="stat-value" id="textTotalValue">0</span></div>
+              <div class="stat"><span class="stat-label">Average</span><span class="stat-value" id="textAvgValue">0</span></div>
+              <div class="stat"><span class="stat-label">Count</span><span class="stat-value" id="textCountValue">0</span></div>
+            </div>
+            <div class="result-actions">
+              <button class="btn-secondary" id="textPrintBtn">Print / PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="how" class="how-section">
+    <div class="wrap">
+      <h2 class="section-title">Kaise kaam karta hai</h2>
+      <div class="how-grid">
+        <div class="how-item">
+          <span class="how-num">1</span>
+          <h4>Upload Karein</h4>
+          <p>Bill ki tasveer, sheet, ya numbers — jo bhi format mein hai wahi de dein.</p>
+        </div>
+        <div class="how-item">
+          <span class="how-num">2</span>
+          <h4>Tool Padhta Hai</h4>
+          <p>Aapka browser khud tasveer/file ke andar ke numbers dhoondta hai — kuch bhi server par nahi jata.</p>
+        </div>
+        <div class="how-item">
+          <span class="how-num">3</span>
+          <h4>Total Milta Hai</h4>
+          <p>Chand seconds mein poora total, average aur breakdown saamne aa jata hai.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about-section">
+    <div class="wrap">
+      <h2 class="section-title">About</h2>
+      <p>Smart Bill Calculator ek free tool hai jo bill, receipts aur sheets ka total nikalna aasan banata hai. Koi account nahi banana, koi payment nahi — sab kuch browser mein hi hota hai, is liye aapka data kahin upload nahi hota.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Smart Bill Calculator — Free tool, banaya logon ki roz ki zaroorat ke liye.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
